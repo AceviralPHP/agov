@@ -148,10 +148,11 @@ func (v *VHost) CreateConfString() string {
 		confString += fmt.Sprintf("  ServerAlias %s\n", strings.Join(v.Alias, " "))
 	}
 
-	confString += fmt.Sprintf(`  ErrorLog %s
+	confString += fmt.Sprintf(`  DocumentRoot %s
+  ErrorLog %s
   CustomLog %s combined
 </VirtualHost>
-`, v.GetErrorLogPath(), v.GetAccessLogPath())
+`, v.GetWebRootPath(), v.GetErrorLogPath(), v.GetAccessLogPath())
 
 	return confString
 }
