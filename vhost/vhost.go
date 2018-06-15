@@ -116,11 +116,11 @@ func (v *VHost) Create() bool {
 }
 
 func (v *VHost) CreateDirs() bool {
-	if err := os.MkdirAll(v.GetWebRootPath(), 0644); nil != err {
+	if err := os.MkdirAll(v.GetWebRootPath(), 0755); nil != err {
 		return false
 	}
 
-	if err := os.Mkdir(v.GetLogRootPath(), 0644); nil != err {
+	if err := os.Mkdir(v.GetLogRootPath(), 0755); nil != err {
 		return false
 	}
 
