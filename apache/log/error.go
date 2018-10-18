@@ -16,6 +16,7 @@ type (
 		Pid  int
 		Ip   string
 		Port int
+		Path string
 		Log  string
 		Hash []byte
 	}
@@ -26,6 +27,7 @@ type (
 		Pid  string
 		Ip   string
 		Port string
+		Path string
 	}
 )
 
@@ -63,6 +65,10 @@ func (f *ErrorFilter) Validate(line []string) bool {
 		return false
 	}
 
+	if "" != f.Path && line[5] != f.Path {
+		return false
+	}
+
 	return true
 }
 
@@ -78,7 +84,8 @@ func parseErrorLine(line []string) (eline *ErrorLine) {
 	eline.Pid, _  = strconv.Atoi(line[2])
 	eline.Ip      = line[3]
 	eline.Port, _ = strconv.Atoi(line[4])
-	eline.Log     = line[5]
+	eline.Path    = line[5]
+	eline.Log     = line[6]
 
 	hash := sha1.New()
 	eline.Hash = hash.Sum([]byte(line[5]))
@@ -93,7 +100,8 @@ func genErrorRegex() string {
 	buffer.WriteString(`^\[([^\]]+)\]\s?`)
 	buffer.WriteString(`\[([^\]]+)\]\s?`)
 	buffer.WriteString(`\[pid\s([^\]]+)\]\s?`)
-	buffer.WriteString(`\[client\s([\d\.])+:(\d+)\]\s?`)
+	buffer.WriteString(`\[client\s([\d\.]+):(\d+)\]\s?`)
+	buffer.WriteString(`(.+?):`)
 	buffer.WriteString(`(.+)$`)
 
 	return buffer.String()
@@ -114,7 +122,8 @@ func ParseErrorLog(path string, filter *ErrorFilter) []*ErrorLine {
 			continue
 		}
 
-		parts := data.FindAllString(line, -1)
+		//data.FindStringSubmatch(line)
+		parts := data.FindStringSubmatch(line)
 
 		if nil != filter || filter.Validate(parts) {
 

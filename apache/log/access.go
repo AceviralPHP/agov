@@ -141,7 +141,7 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 			continue
 		}
 
-		parts := data.FindAllString(line, -1)
+		parts := data.FindAllString(line, 9)
 
 		if nil != filter || filter.Validate(parts) {
 
