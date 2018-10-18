@@ -124,7 +124,7 @@ func ParseErrorLog(path string, filter *ErrorFilter) []*ErrorLine {
 
 		parts := data.FindStringSubmatch(line)
 
-		if nil != filter || filter.Validate(parts) {
+		if nil == filter || filter.Validate(parts) {
 
 			if eline := parseErrorLine(parts); nil != eline {
 				lines = append(lines, eline)

@@ -143,7 +143,7 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 
 		parts := data.FindStringSubmatch(line)
 
-		if nil != filter || filter.Validate(parts) {
+		if nil == filter || filter.Validate(parts) {
 
 			if aline := parseAccessLine(parts); nil != aline {
 				lines = append(lines, aline)
