@@ -88,7 +88,7 @@ func parseErrorLine(line []string) (eline *ErrorLine) {
 	eline.Log     = line[7]
 
 	hash := sha1.New()
-	eline.Hash = string(hash.Sum([]byte(line[7])))
+	eline.Hash = fmt.Sprintf("%x", hash.Sum([]byte(line[7])))
 
 	return
 }
