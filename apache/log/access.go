@@ -147,11 +147,7 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 
 			if aline := parseAccessLine(parts); nil != aline {
 				lines = append(lines, aline)
-			} else {
-				fmt.Println("Failed to parse")
-			}
-		} else if !filter.Validate(parts) {
-			fmt.Println("failed to validate")
+			} 
 		}
 
 	}
