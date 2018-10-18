@@ -37,7 +37,7 @@ type (
 
 // validate the split line against the filter to check if it should be kept or discarded
 func (f *AccessFilter) Validate(line []string) bool {
-	if 9 != len(line) {
+	if 10 != len(line) {
 		return false
 	}
 
@@ -47,40 +47,40 @@ func (f *AccessFilter) Validate(line []string) bool {
 			return false
 		}
 
-		if !re.Match([]byte(line[1])) {
+		if !re.Match([]byte(line[2])) {
 			return false
 		}
 	}
 
-	if "" != f.Ip && line[0] != f.Ip {
+	if "" != f.Ip && line[1] != f.Ip {
 		return false
 	}
 
-	if "" != f.Verb && line[2] != f.Verb {
+	if "" != f.Verb && line[3] != f.Verb {
 		return false
 	}
 
-	if "" != f.Path && line[3] != f.Path {
+	if "" != f.Path && line[4] != f.Path {
 		return false
 	}
 
-	if "" != f.Protocol && line[4] != f.Protocol {
+	if "" != f.Protocol && line[5] != f.Protocol {
 		return false
 	}
 
-	if "" != f.Code && line[5] != f.Code {
+	if "" != f.Code && line[6] != f.Code {
 		return false
 	}
 
-	if "" != f.Size && line[6] != f.Size {
+	if "" != f.Size && line[7] != f.Size {
 		return false
 	}
 
-	if "" != f.Referrer && line[7] != f.Referrer {
+	if "" != f.Referrer && line[8] != f.Referrer {
 		return false
 	}
 
-	if "" != f.UserAgent && line[8] != f.UserAgent {
+	if "" != f.UserAgent && line[9] != f.UserAgent {
 		return false
 	}
 
@@ -89,20 +89,20 @@ func (f *AccessFilter) Validate(line []string) bool {
 
 
 func parseAccessLine(line []string) (aline *AccessLine) {
-	if 9 != len(line) {
+	if 10 != len(line) {
 		return
 	}
 
 	aline = &AccessLine{}
-	aline.Ip        = line[0]
-	aline.Date, _   = time.Parse("Mon Jan 2 15:04:05.999999 2006", line[1])
-	aline.Verb      = line[2]
-	aline.Path      = line[3]
-	aline.Protocol  = line[4]
-	aline.Code, _   = strconv.Atoi(line[5])
-	aline.Size, _   = strconv.Atoi(line[6])
-	aline.Referrer  = line[7]
-	aline.UserAgent = line[8]
+	aline.Ip        = line[1]
+	aline.Date, _   = time.Parse("Mon Jan 2 15:04:05.999999 2006", line[2])
+	aline.Verb      = line[3]
+	aline.Path      = line[4]
+	aline.Protocol  = line[5]
+	aline.Code, _   = strconv.Atoi(line[6])
+	aline.Size, _   = strconv.Atoi(line[7])
+	aline.Referrer  = line[8]
+	aline.UserAgent = line[9]
 
 	return
 }
@@ -141,7 +141,7 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 			continue
 		}
 
-		parts := data.FindAllString(line, 9)
+		parts := data.FindStringSubmatch(line)
 
 		if nil != filter || filter.Validate(parts) {
 
