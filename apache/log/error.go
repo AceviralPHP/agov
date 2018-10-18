@@ -18,7 +18,7 @@ type (
 		Port int
 		Path string
 		Log  string
-		Hash []byte
+		Hash string
 	}
 
 	ErrorFilter struct {
@@ -88,7 +88,7 @@ func parseErrorLine(line []string) (eline *ErrorLine) {
 	eline.Log     = line[7]
 
 	hash := sha1.New()
-	eline.Hash = hash.Sum([]byte(line[7]))
+	eline.Hash = string(hash.Sum([]byte(line[7])))
 
 	return
 }
