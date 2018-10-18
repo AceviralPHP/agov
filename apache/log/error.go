@@ -62,7 +62,7 @@ func (f *ErrorFilter) Validate(line []string) bool {
 		return false
 	}
 
-	return false
+	return true
 }
 
 
