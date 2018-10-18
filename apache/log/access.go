@@ -2,6 +2,7 @@ package log
 
 import (
 	"bytes"
+	"fmt"
 	"regexp"
 	"strconv"
 	"time"
@@ -136,6 +137,7 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 		line := scanner.Text()
 		data, err := regexp.Compile(genAccessRegex())
 		if nil != err {
+			fmt.Println(err)
 			continue
 		}
 
@@ -145,9 +147,13 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 
 			if aline := parseAccessLine(parts); nil != aline {
 				lines = append(lines, aline)
+			} else {
+				fmt.Println("Failed to parse")
 			}
-
+		} else if !filter.Validate(parts) {
+			fmt.Println("failed to validate")
 		}
+
 	}
 
 	return lines

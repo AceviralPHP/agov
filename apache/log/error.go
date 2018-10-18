@@ -3,6 +3,7 @@ package log
 import (
 	"bytes"
 	"crypto/sha1"
+	"fmt"
 	"regexp"
 	"strconv"
 	"time"
@@ -109,6 +110,7 @@ func ParseErrorLog(path string, filter *ErrorFilter) []*ErrorLine {
 		line := scanner.Text()
 		data, err := regexp.Compile(genErrorRegex())
 		if nil != err {
+			fmt.Println(err)
 			continue
 		}
 
@@ -118,8 +120,12 @@ func ParseErrorLog(path string, filter *ErrorFilter) []*ErrorLine {
 
 			if eline := parseErrorLine(parts); nil != eline {
 				lines = append(lines, eline)
+			} else {
+				fmt.Println("Failed to parse")
 			}
 
+		} else if !filter.Validate(parts) {
+			fmt.Println("failed to validate")
 		}
 	}
 
