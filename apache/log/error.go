@@ -93,7 +93,7 @@ func genErrorRegex() string {
 	buffer.WriteString(`^\[([^\]]+)\]\s?`)
 	buffer.WriteString(`\[([^\]]+)\]\s?`)
 	buffer.WriteString(`\[pid\s([^\]]+)\]\s?`)
-	buffer.WriteString(`\[client\s([\d\.])+(\d|)\]\s?`)
+	buffer.WriteString(`\[client\s([\d\.])+:(\d+)\]\s?`)
 	buffer.WriteString(`(.+)$`)
 
 	return buffer.String()
