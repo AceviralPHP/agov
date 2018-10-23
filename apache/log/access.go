@@ -147,7 +147,7 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 
 			if aline := parseAccessLine(parts); nil != aline {
 				lines = append(lines, aline)
-			} 
+			}
 		}
 
 	}
