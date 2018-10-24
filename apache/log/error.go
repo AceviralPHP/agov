@@ -121,16 +121,16 @@ func ParseErrorLog(path string, filter *ErrorFilter) []*ErrorLine {
 	defer file.Close()
 
 	var lines []*ErrorLine
+	regstring := genErrorRegex()
+	regCheck, err := regexp.Compile(regstring)
+	if nil != err {
+		fmt.Println(err)
+		return lines
+	}
 
 	for scanner.Scan() {
-		line := scanner.Text()
-		data, err := regexp.Compile(genErrorRegex())
-		if nil != err {
-			fmt.Println(err)
-			continue
-		}
-
-		parts := data.FindStringSubmatch(line)
+		line  := scanner.Text()
+		parts := regCheck.FindStringSubmatch(line)
 
 		if nil == filter || filter.Validate(parts) {
 
