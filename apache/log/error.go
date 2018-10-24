@@ -66,7 +66,7 @@ func (f *ErrorFilter) Validate(line []string) bool {
 		return false
 	}
 
-	if "" != f.Referrer && line[8] != f.Referrer {
+	if "" != f.Referrer && line[7] != f.Referrer {
 		return false
 	}
 
@@ -93,7 +93,7 @@ func parseErrorLine(line []string) (eline *ErrorLine) {
 	eline.Referrer = line[7]
 
 	hash := sha1.New()
-	hash.Write([]byte(line[7]))
+	hash.Write([]byte(line[6]))
 	eline.Hash = fmt.Sprintf("%x", hash.Sum(nil))
 
 	return
