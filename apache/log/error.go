@@ -80,7 +80,7 @@ func (f *ErrorFilter) Validate(line []string) bool {
 
 
 func parseErrorLine(line []string) (eline *ErrorLine) {
-	if 8 != len(line) {
+	if 9 != len(line) {
 		return
 	}
 
