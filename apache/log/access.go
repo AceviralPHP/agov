@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -132,16 +133,17 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 	defer file.Close()
 
 	var lines []*AccessLine
+	regCheck, err := regexp.Compile(genAccessRegex())
+	if nil != err {
+		fmt.Println(err)
+		return lines
+	}
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		data, err := regexp.Compile(genAccessRegex())
-		if nil != err {
-			fmt.Println(err)
-			continue
-		}
 
-		parts := data.FindStringSubmatch(line)
+
+		parts := regCheck.FindStringSubmatch(line)
 
 		if nil == filter || filter.Validate(parts) {
 
@@ -150,6 +152,34 @@ func ParseAccessLog(path string, filter *AccessFilter) []*AccessLine {
 			}
 		}
 
+	}
+
+	return lines
+}
+
+
+func ParseAccessString(logText string, filter *AccessFilter) []*AccessLine {
+	text := strings.Split(logText, "\n")
+
+	var lines []*AccessLine
+	regstring := genAccessRegex()
+	regCheck, err := regexp.Compile(regstring)
+	if nil != err {
+		fmt.Println(err)
+		return lines
+	}
+
+
+	for _, line := range text {
+		parts := regCheck.FindStringSubmatch(line)
+
+		if nil == filter || filter.Validate(parts) {
+
+			if aline := parseAccessLine(parts); nil != aline {
+				lines = append(lines, aline)
+			}
+
+		}
 	}
 
 	return lines
